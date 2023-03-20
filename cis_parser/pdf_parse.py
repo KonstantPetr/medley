@@ -6,7 +6,6 @@ from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfpage import PDFPage
 
-from exceptions import BadPDFException, InvalidSearchInPDFException
 from get_settings import SetUp
 
 
@@ -36,23 +35,21 @@ class PDFParser:
         converter.close()
         fake_file_handle.close()
 
-        if self.pdf_text:
-            return self.pdf_text
-        else:
-            raise BadPDFException
+        return self.pdf_text
 
     def parse_pdf(self):
 
         self.pdf_out_data_list = []
 
         for reg_expr_list in self.pdf_search_list:
+
             try:
                 start_pos = re.search(rf'{reg_expr_list[0]}', self.pdf_text).span()[1]
                 end_pos = re.search(rf'{reg_expr_list[1]}', self.pdf_text).span()[0]
                 self.pdf_out_data_list.append(self.pdf_text[start_pos:end_pos])
 
-            except Exception:
-                raise InvalidSearchInPDFException
+            except TypeError or SyntaxError or ValueError:
+                self.pdf_out_data_list.append('no_data_found')
 
         return self.pdf_out_data_list
 

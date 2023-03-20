@@ -1,25 +1,10 @@
 import json
 
+from servitor import out_keys
+
 
 def compose_out_data(html_out_data_vector, pdf_out_data_vector, settings):
-    
-    out_keys = ('country',
-                'named_bank',
-                'info_bank',
-                'product',
-                'type_card',
-                'purpose',
-                'map_type',
-                'currency',
-                'condition_reg',
-                'swift',
-                'pay',
-                'reg_cost',
-                'maint_cost',
-                'time_opening',
-                'description',
-                )
-    
+
     out_data = []
 
     for bank_settings in settings:

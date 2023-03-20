@@ -1,15 +1,16 @@
 import os
 
-from exceptions import NoPDFFileException
 from get_settings import SetUp
+from servitor import format_keys
 
 
 def clear_pdf(pdf_paths):
+
     for pdf_path in pdf_paths:
-        if os.path.isfile(pdf_paths[pdf_path]):
+        try:
             os.remove(pdf_paths[pdf_path])
-        else:
-            raise NoPDFFileException
+        except FileNotFoundError:
+            pass
 
 
 def format_currency(out_data):
@@ -28,14 +29,19 @@ def format_currency(out_data):
 def format_types(out_data):
 
     for i, bank_data in enumerate(out_data):
+
         for bank_data_unit_id in bank_data:
             if type(bank_data[bank_data_unit_id]) == list and len(bank_data[bank_data_unit_id]) == 1:
                 out_data[i][bank_data_unit_id] = str(bank_data[bank_data_unit_id][0])
-        if len(out_data[i]['time_opening'].split()) != 1:
-            out_data[i]['time_opening'] = out_data[i]['time_opening'].split()
+
+        for format_key in format_keys:
+            if len(out_data[i][format_key].split(',')) != 1:
+                out_data[i][format_key] = out_data[i][format_key].split(',')
+
         out_data[i]['terms_reg'] = \
             {'time_opening': out_data[i]['time_opening'], 'description': out_data[i]['description']}
-        out_data[i].pop('time_opening', 'description')
+        for key in ('time_opening', 'description'):
+            out_data[i].pop(key)
 
     return out_data
 

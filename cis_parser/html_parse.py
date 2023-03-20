@@ -43,7 +43,7 @@ class HTMLParser:
                 pass
 
         except NoSuchElementException:
-            html_out_data_item = 'неизвестно'
+            html_out_data_item = 'no_data_found'
 
         self.html_out_data_list.append(html_out_data_item)
 
